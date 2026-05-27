@@ -54,10 +54,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+# Database
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 
@@ -79,11 +84,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
+TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
-
 USE_TZ = True
 
-STATIC_URL = "static/"
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
