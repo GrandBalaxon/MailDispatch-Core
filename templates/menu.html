@@ -1,0 +1,59 @@
+<div class="d-flex flex-row flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow justify-content-between">
+
+    <div class="d-flex align-items-center">
+        <h5 class="my-0 mr-md-auto font-weight-normal">MailDispatch</h5>
+        <nav class="ms-4">
+            <a class="p-2 btn btn-outline-primary" href="/">Главная</a>
+            <a class="p-2 btn btn-outline-primary" href="#">Получатели</a>
+            <a class="p-2 btn btn-outline-primary" href="#">Сообщения</a>
+            <a class="p-2 btn btn-outline-primary" href="#">Рассылки</a>
+            <a class="p-2 btn btn-outline-secondary" href="/admin/">Admin</a>
+        </nav>
+    </div>
+
+
+    <div class="d-flex align-items-center gap-2">
+
+        <!-- Меню пользователя / Авторизация -->
+        {% if user.is_authenticated %}
+            <div class="dropdown d-flex align-items-center">
+
+                <button class="btn d-flex align-items-center gap-2 border-0 bg-transparent dropdown-toggle pe-0 shadow-none"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+
+                    <span class="font-weight-normal text-dark me-1">{{ user.username }}</span>
+
+                    {% if user.avatar %}
+                        <img src="#" alt="Аватар" class="rounded-circle border" width="40" height="40" style="object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle font-weight-bold"
+                             style="width: 40px; height: 40px; font-size: 1.1rem;">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item" href="#">Профиль</a></li>
+                    <li>
+                        <form method="post" action="#" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-danger">Выход</button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+        {% else %}
+            <div class="d-flex align-items-center gap-2">
+                <a class="p-2 btn btn-outline-primary" href="#">Войти</a>
+                <a class="p-2 btn btn-primary" href="#">Регистрация</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
