@@ -1,3 +1,47 @@
 from django.db import models
 
-# Create your models here.
+
+class MailingRecipient(models.Model):
+    full_name = models.CharField(max_length=100, verbose_name="Ф.И.О.")
+    email = models.EmailField(unique=True)
+    comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="Комментарий")
+
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        verbose_name = "получатель рассылки"
+        verbose_name_plural = "получатели рассылки"
+
+
+class Message(models.Model):
+    subject = models.CharField(max_length=100, verbose_name="Тема письма")
+    body = models.TextField(verbose_name="Тело письма")
+
+    def __str__(self):
+        return self.subject
+
+    class Meta:
+        verbose_name = "сообщение"
+        verbose_name_plural = "сообщения"
+
+
+class Mailing(models.Model):
+    STATUS_CHOICES = [
+        ("created", "Создана"),
+        ("launched", "Запущена"),
+        ("finished", "Завершена")
+    ]
+
+    start_time = models.DateTimeField(verbose_name="Дата и время начала отправки")
+    end_time = models.DateTimeField(verbose_name="Дата и время окончания отправки")
+    status = models.CharField(null=False, blank=False, choices=STATUS_CHOICES, verbose_name="Статус")
+    message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
+    recipients = models.ManyToManyField(MailingRecipient)
+
+    def __str__(self):
+        return f"{self.message} - {self.status} - Получателей: {len(self.recipients.all())}"
+
+    class Meta:
+        verbose_name = "рассылка"
+        verbose_name_plural = "рассылки"
