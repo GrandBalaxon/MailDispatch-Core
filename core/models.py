@@ -37,7 +37,7 @@ class Mailing(models.Model):
     end_time = models.DateTimeField(verbose_name="Дата и время окончания отправки")
     status = models.CharField(null=False, blank=False, choices=STATUS_CHOICES, verbose_name="Статус")
     message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
-    recipients = models.ManyToManyField(MailingRecipient)
+    recipients = models.ManyToManyField(MailingRecipient, related_name="mailings")
 
     def __str__(self):
         return f"{self.message} - {self.status} - Получателей: {len(self.recipients.all())}"

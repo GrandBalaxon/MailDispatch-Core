@@ -2,14 +2,17 @@
 
 {% block content %}
 <div class="container flex-grow-1">
-    <div>
+
+    <a class="btn btn-primary" href="{% url 'core:recipient_create' %}">Добавить получателя</a>
+
+    <div class="mt-2">
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Ф.И.О.</th>
                     <th scope="col">email</th>
-                    <th scope="col">Комментарий</th>
+                    <th scope="col">Рассылки</th>
                     <th scope="col">Управление</th>
                 </tr>
             </thead>
@@ -19,9 +22,17 @@
                     <th scope="row">{{ recipient.id }}</th>
                     <td>{{ recipient.full_name }}</td>
                     <td>{{ recipient.email }}</td>
-                    <td>{{ recipient.comment }}</td>
+                    <td>
+                        {% for mailing in recipient.mailings.all %}
+                            <a class="btn {% if mailing.status == 'created' %}btn-secondary{% elif mailing.status == 'launched' %}btn-success{% else %}btn-danger{% endif %}" href="#">
+                                {{ mailing.message }} <span class="badge text-bg-light">{{ mailing.recipients.all.count }}</span>
+                            </a>
+                        {% empty %}
+                            —
+                        {% endfor %}
+                    </td>
                     <td class="align-items-center gap-2">
-                        <a href="#" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3 mb-2">
+                        <a href="#" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                                 <use href="/static/images/pencil-square.svg"/>
                             </svg>
