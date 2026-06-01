@@ -2,7 +2,7 @@ from django.db.models import Prefetch, Count, OuterRef, Subquery
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView
 
-from core.forms import MailingRecipientForm
+from core.forms import MailingRecipientForm, MailingForm
 from core.models import Mailing, MailingRecipient, Message
 
 
@@ -37,7 +37,7 @@ class RecipientCreateView(CreateView):
     model = MailingRecipient
     form_class = MailingRecipientForm
     template_name = "core/recipients/create.html"
-    success_url = reverse_lazy("core:mailing_recipients")
+    success_url = reverse_lazy("core:recipient_create")
 
 
 # model Mailing views
@@ -45,6 +45,13 @@ class MailingsView(ListView):
     model = Mailing
     template_name = "core/mailings/list.html"
     context_object_name = "mailings"
+
+
+class MailingCreateView(CreateView):
+    model = Mailing
+    form_class = MailingForm
+    template_name = "core/mailings/create.html"
+    success_url = reverse_lazy("core:mailing_create")
 
 
 # model Messages views
