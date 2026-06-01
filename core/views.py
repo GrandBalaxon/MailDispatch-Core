@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from core.models import Mailing, MailingRecipient
 
@@ -23,3 +23,9 @@ class HomePageView(TemplateView):
         context['unique_receivers'] = unique_receivers
 
         return context
+
+
+class MailingRecipientsView(ListView):
+    model = MailingRecipient
+    template_name = "core/mailing_recipients.html"
+    context_object_name = "recipients"

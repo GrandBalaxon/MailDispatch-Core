@@ -6,4 +6,5 @@ app_name = CoreConfig.name
 
 urlpatterns = [
     path('', HomePageView.as_view(), name="home"),
+    path('mailing/recipients/', MailingRecipientsView.as_view(), name="mailing_recipients"),
 ]

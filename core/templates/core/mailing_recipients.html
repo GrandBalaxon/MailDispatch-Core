@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container flex-grow-1">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Ф.И.О.</th>
+                    <th scope="col">email</th>
+                    <th scope="col">Комментарий</th>
+                    <th scope="col">Управление</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipient in recipients %}
+                <tr>
+                    <th scope="row">{{ recipient.id }}</th>
+                    <td>{{ recipient.full_name }}</td>
+                    <td>{{ recipient.email }}</td>
+                    <td>{{ recipient.comment }}</td>
+                    <td class="align-items-center gap-2">
+                        <a href="#" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3 mb-2">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                <use href="/static/images/pencil-square.svg"/>
+                            </svg>
+                            Редактировать
+                        </a>
+                        <a href="#" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center gap-2 px-3">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                <use href="/static/images/trash-fill.svg"/>
+                            </svg>
+                            Удалить
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
