@@ -59,7 +59,7 @@ class MailingAttempt(models.Model):
         verbose_name="Статус"
     )
     server_response = models.TextField(verbose_name="Ответ почтового сервера")
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name="Рассылка")
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name="Рассылка", related_name="attempts")
 
     def __str__(self):
         return f"{self.attempt_time} - {self.status}"
