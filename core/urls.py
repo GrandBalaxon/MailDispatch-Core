@@ -15,6 +15,9 @@ urlpatterns = [
 
     path('mailing/recipients/', MailingRecipientsView.as_view(), name="recipient_list"),
     path('mailing/recipients/add/', RecipientCreateView.as_view(), name="recipient_create"),
+    path('mailing/recipients/<int:pk>/', RecipientDetailsView.as_view(), name="recipient_details"),
+    path('mailing/recipients/<int:pk>/edit/', RecipientUpdateView.as_view(), name="recipient_edit"),
+    path('mailing/recipients/<int:pk>/delete/', RecipientDeleteView.as_view(), name="recipient_delete"),
 
     path('mailing/messages/', MessagesView.as_view(), name="message_list"),
     path('mailing/messages/add/', MessageCreateView.as_view(), name="message_create"),

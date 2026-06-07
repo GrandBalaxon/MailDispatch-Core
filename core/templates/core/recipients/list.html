@@ -24,25 +24,20 @@
                     <td>{{ recipient.email }}</td>
                     <td>
                         {% for mailing in recipient.mailings.all %}
-                            <a class="btn {% if mailing.status == 'created' %}btn-secondary{% elif mailing.status == 'launched' %}btn-success{% else %}btn-danger{% endif %}" href="#">
+                            <a class="btn btn-sm {% if mailing.status == 'created' %}btn-secondary{% elif mailing.status == 'launched' %}btn-success{% else %}btn-danger{% endif %}" href="#">
                                 {{ mailing.message }} <span class="badge text-bg-light">{{ mailing.recipients.all.count }}</span>
                             </a>
                         {% empty %}
                             —
                         {% endfor %}
                     </td>
-                    <td class="align-items-center gap-2">
-                        <a href="#" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                <use href="/static/images/pencil-square.svg"/>
+                    <td>
+                        <a href="{% url 'core:recipient_details' pk=recipient.id %}"
+                           class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-3">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                <use href="/static/images/info-circle.svg"/>
                             </svg>
-                            Редактировать
-                        </a>
-                        <a href="#" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center gap-2 px-3">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                <use href="/static/images/trash-fill.svg"/>
-                            </svg>
-                            Удалить
+                            Подробнее
                         </a>
                     </td>
                 </tr>

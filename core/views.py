@@ -33,11 +33,36 @@ class MailingRecipientsView(ListView):
     context_object_name = "recipients"
 
 
+class RecipientDetailsView(TemplateView):
+    model = MailingRecipient
+    template_name = "core/recipients/details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        recipient = MailingRecipient.objects.get(pk=self.kwargs["pk"])
+        context['recipient'] = recipient
+        return context
+
+
 class RecipientCreateView(CreateView):
     model = MailingRecipient
     form_class = MailingRecipientForm
     template_name = "core/recipients/create.html"
     success_url = reverse_lazy("core:recipient_list")
+
+
+class RecipientUpdateView(UpdateView):
+    model = MailingRecipient
+    form_class = MailingRecipientForm
+    template_name = "core/recipients/update.html"
+    success_url = reverse_lazy("core:recipient_list")
+
+
+class RecipientDeleteView(DeleteView):
+    model = MailingRecipient
+    template_name = "core/recipients/delete.html"
+    success_url = reverse_lazy("core:recipient_list")
+    context_object_name = "recipient"
 
 
 # model Mailing views
