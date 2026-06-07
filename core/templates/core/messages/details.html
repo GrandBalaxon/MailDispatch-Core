@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container flex-grow-1">
+
+    <h3>Письмо для рассылки #{{ message.id }}</h3>
+
+    <div class="mt-2">
+        <p>{{ message.subject }}</p>
+        <p>{{ message.body }}</p>
+
+        <div class="btn-group align-items-center gap-2">
+            <a href="{% url 'core:message_edit' pk=message.id %}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <use href="/static/images/pencil-square.svg"/>
+                </svg>
+                Редактировать
+            </a>
+            <a href="{% url 'core:message_delete' pk=message.id %}" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center gap-2 px-3">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <use href="/static/images/trash-fill.svg"/>
+                </svg>
+                Удалить
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

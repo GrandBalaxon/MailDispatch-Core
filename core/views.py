@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
 from core.forms import MailingRecipientForm, MailingForm, MessageForm
 from core.models import Mailing, MailingRecipient, Message
@@ -61,8 +61,32 @@ class MessagesView(ListView):
     context_object_name = "messages"
 
 
+class MessageDetailsView(TemplateView):
+    model = Message
+    template_name = "core/messages/details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        message = Message.objects.get(pk=self.kwargs["pk"])
+        context['message'] = message
+        return context
+
+
 class MessageCreateView(CreateView):
     model = Message
     form_class = MessageForm
     template_name = "core/messages/create.html"
+    success_url = reverse_lazy("core:message_list")
+
+
+class MessageUpdateView(UpdateView):
+    model = Message
+    form_class = MessageForm
+    template_name = "core/messages/update.html"
+    success_url = reverse_lazy("core:message_list")
+
+
+class MessageDeleteView(DeleteView):
+    model = Message
+    template_name = "core/messages/delete.html"
     success_url = reverse_lazy("core:message_list")
