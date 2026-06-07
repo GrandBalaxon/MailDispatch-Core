@@ -14,4 +14,5 @@ urlpatterns = [
     path('mailing/recipients/add/', RecipientCreateView.as_view(), name="recipient_create"),
 
     path('mailing/messages/', MessagesView.as_view(), name="message_list"),
+    path('mailing/messages/add/', MessageCreateView.as_view(), name="message_create"),
 ]
