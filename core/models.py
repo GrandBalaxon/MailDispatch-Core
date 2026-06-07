@@ -1,4 +1,7 @@
+import datetime
+
 from django.db import models
+from django.utils.timezone import now
 
 
 class MailingRecipient(models.Model):
@@ -41,6 +44,17 @@ class Mailing(models.Model):
 
     def __str__(self):
         return f"{self.message} - {self.status} - Получателей: {len(self.recipients.all())}"
+
+    def update_status(self) -> None:
+        """
+        Метод проверки текущего времени, сравнения его с временем начала и окончания рассылки и обновления статуса рассылки.
+        """
+        current_time = now()
+        if self.start_time < current_time < self.end_time:
+            self.status = "launched"
+        elif self.end_time <= current_time:
+            self.status = "finished"
+        self.save()
 
     class Meta:
         verbose_name = "рассылка"
