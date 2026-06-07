@@ -47,10 +47,35 @@ class MailingsView(ListView):
     context_object_name = "mailings"
 
 
+class MailingDetailsView(TemplateView):
+    model = Mailing
+    template_name = "core/mailings/details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mailing = Mailing.objects.get(pk=self.kwargs["pk"])
+        mailing.update_status()
+        context['mailing'] = mailing
+        return context
+
+
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = "core/mailings/create.html"
+    success_url = reverse_lazy("core:mailing_list")
+
+
+class MailingUpdateView(UpdateView):
+    model = Mailing
+    form_class = MailingForm
+    template_name = "core/mailings/update.html"
+    success_url = reverse_lazy("core:mailing_list")
+
+
+class MailingDeleteView(DeleteView):
+    model = Mailing
+    template_name = "core/mailings/delete.html"
     success_url = reverse_lazy("core:mailing_list")
 
 

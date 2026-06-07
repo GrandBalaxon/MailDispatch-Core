@@ -20,33 +20,28 @@
             </thead>
             <tbody>
                 {% for mailing in mailings %}
-                <tr>
+                <tr class="align-middle">
                     <th scope="row">{{ mailing.id }}</th>
                     <td>{{ mailing.message }}</td>
                     <td>
                         {% if mailing.status == 'created' %}
-                            <div class="btn btn-secondary">Создана</div>
+                            <div class="btn btn-sm btn-secondary">Создана</div>
                         {% elif mailing.status == 'launched' %}
-                            <div class="btn btn-success">Запущена</div>
+                            <div class="btn btn-sm btn-success">Запущена</div>
                         {% else %}
-                            <div class="btn btn-danger">Завершена</div>
+                            <div class="btn btn-sm btn-danger">Завершена</div>
                         {% endif %}
                     </td>
                     <td>{{ mailing.start_time }}</td>
                     <td>{{ mailing.end_time }}</td>
                     <td>{{ mailing.recipients.all.count }}</td>
-                    <td class="align-items-center gap-2">
-                        <a href="#" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                <use href="/static/images/pencil-square.svg"/>
+                    <td>
+                        <a href="{% url 'core:mailing_details' pk=mailing.id %}"
+                           class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-3">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                <use href="/static/images/info-circle.svg"/>
                             </svg>
-                            Редактировать
-                        </a>
-                        <a href="#" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center gap-2 px-3">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                                <use href="/static/images/trash-fill.svg"/>
-                            </svg>
-                            Удалить
+                            Подробнее
                         </a>
                     </td>
                 </tr>
