@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.utils.timezone import now
 
@@ -63,6 +61,7 @@ class Mailing(models.Model):
 
 class MailingAttempt(models.Model):
     attempt_time = models.DateTimeField(auto_now=True, verbose_name="Дата и время попытки")
+    email = models.EmailField(default="default@example.com", verbose_name="Почта получателя")
     status = models.CharField(
         null=False,
         blank=False,
