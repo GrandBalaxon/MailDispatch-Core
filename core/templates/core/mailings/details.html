@@ -25,6 +25,12 @@
         <p>Количество получателей: {{ mailing.recipients.all.count }}</p>
 
         <div class="btn-group align-items-center gap-2">
+            <a href="{% url 'core:mailing_send' pk=mailing.id %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <use href="/static/images/send-fill.svg"/>
+                </svg>
+                Сделать рассылку
+            </a>
             <a href="{% url 'core:mailing_edit' pk=mailing.id %}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                     <use href="/static/images/pencil-square.svg"/>
@@ -38,6 +44,29 @@
                 Удалить
             </a>
         </div>
+
+        <p>Попыток рассылки: {{ mailing.attempts.all.count }}</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Дата и время</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Ответ почтового сервера</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in mailing.attempts.all %}
+                <tr class="align-middle">
+                    <th scope="row">{{ attempt.id }}</th>
+                    <td>{{ attempt.attempt_time }}</td>
+                    <td>{{ attempt.status }}</td>
+                    <td>{{ attempt.server_response }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
 </div>
 {% endblock %}

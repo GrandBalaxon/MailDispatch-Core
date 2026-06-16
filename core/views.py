@@ -1,8 +1,11 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
 from core.forms import MailingRecipientForm, MailingForm, MessageForm
 from core.models import Mailing, MailingRecipient, Message
+from core.services import run_mailing
 
 
 class HomePageView(TemplateView):
@@ -140,3 +143,10 @@ class MessageDeleteView(DeleteView):
     model = Message
     template_name = "core/messages/delete.html"
     success_url = reverse_lazy("core:message_list")
+
+
+def mailing_run_view(request, pk):
+    mailing = get_object_or_404(Mailing, pk=pk)
+
+    run_mailing(mailing)
+    return redirect('core:mailing_details', pk=pk)
