@@ -5,6 +5,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, null=False, blank=False)
     token = models.CharField(max_length=100, verbose_name="Токен верификации")
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватар")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username',]
