@@ -1,13 +1,26 @@
 <div class="d-flex flex-row flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow justify-content-between">
 
     <div class="d-flex align-items-center">
-        <a class="my-0 mr-md-auto font-weight-normal" href="{% url 'core:home' %}">MailDispatch</a>
+
+        <!-- Иконка сайта / HOME-button -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+            <div class="bg-primary text-white rounded p-1.5 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <use href="/static/images/send-fill.svg"/>
+                </svg>
+            </div>
+            <span class="fs-5 fw-bold tracking-tight">
+                <span class="text-dark">Mail</span><span class="text-primary fw-medium">Dispatch</span>
+            </span>
+        </a>
+
         <nav class="ms-4">
             <a class="p-2 btn btn-outline-primary" href="{% url 'core:recipient_list' %}">Получатели</a>
             <a class="p-2 btn btn-outline-primary" href="{% url 'core:message_list' %}">Сообщения</a>
             <a class="p-2 btn btn-outline-primary" href="{% url 'core:mailing_list' %}">Рассылки</a>
             <a class="p-2 btn btn-outline-secondary" href="/admin/">Admin</a>
         </nav>
+
     </div>
 
 

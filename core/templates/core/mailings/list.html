@@ -15,6 +15,7 @@
                     <th scope="col">Дата и время начала отправки</th>
                     <th scope="col">Дата и время окончания отправки</th>
                     <th scope="col">Количество получателей</th>
+                    <th scope="col">Количество попыток отправки</th>
                     <th scope="col">Управление</th>
                 </tr>
             </thead>
@@ -35,6 +36,7 @@
                     <td>{{ mailing.start_time }}</td>
                     <td>{{ mailing.end_time }}</td>
                     <td>{{ mailing.recipients.all.count }}</td>
+                    <td>{{ mailing.attempts.all.count }}</td>
                     <td>
                         <a href="{% url 'core:mailing_details' pk=mailing.id %}"
                            class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-3">
