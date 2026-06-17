@@ -1,71 +1,164 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container flex-grow-1">
+<div class="container py-4 flex-grow-1">
 
-    <h3>Рассылка #{{ mailing.id }} "{{ mailing.message.subject }}"</h3>
+    <!-- Блок отображения ошибок и уведомлений -->
+    {% if messages %}
+        <div class="messages-container mb-4">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <use href="/static/images/exclamation-circle.svg"/>
+                    </svg>
+                    <div>
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-    <div class="mt-2">
-        <p>Время начала рассылки: {{ mailing.start_time }}</p>
-        <p>Время конца рассылки: {{ mailing.end_time }}</p>
-
-        {% if mailing.status == 'created' %}
-            <div class="btn btn-sm btn-secondary">Создана</div>
-        {% elif mailing.status == 'launched' %}
-            <div class="btn btn-sm btn-success">Запущена</div>
-        {% else %}
-            <div class="btn btn-sm btn-danger">Завершена</div>
-        {% endif %}
-
-        <div class="d-flex align-items-center gap-2">
-            <p>Связанное сообщение: </p>
-            <a href="{% url 'core:message_details' pk=mailing.message.id %}" class="btn btn-sm btn-primary">{{ mailing.message.subject }}</a>
+    <!-- Шапка страницы с заголовком и кнопками управления -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pb-3 mb-4 border-bottom">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 text-muted small">
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Рассылки</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Детали #{{ mailing.id }}</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0">Рассылка #{{ mailing.id }} «{{ mailing.message.subject }}»</h2>
         </div>
 
-        <p>Количество получателей: {{ mailing.recipients.all.count }}</p>
-
-        <div class="btn-group align-items-center gap-2">
-            <a href="{% url 'core:mailing_send' pk=mailing.id %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+        <div class="d-flex gap-2">
+            <a href="{% url 'core:mailing_send' pk=mailing.id %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 shadow-sm">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <use href="/static/images/send-fill.svg"/>
                 </svg>
-                Сделать рассылку
+                Запустить
             </a>
-            <a href="{% url 'core:mailing_edit' pk=mailing.id %}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2 px-3">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <a href="{% url 'core:mailing_edit' pk=mailing.id %}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 px-3">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <use href="/static/images/pencil-square.svg"/>
                 </svg>
                 Редактировать
             </a>
             <a href="{% url 'core:mailing_delete' pk=mailing.id %}" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center gap-2 px-3">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <use href="/static/images/trash-fill.svg"/>
                 </svg>
                 Удалить
             </a>
         </div>
+    </div>
 
-        <p>Попыток рассылки: {{ mailing.attempts.all.count }}</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Дата и время</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Ответ почтового сервера</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for attempt in mailing.attempts.all %}
-                <tr class="align-middle">
-                    <th scope="row">{{ attempt.id }}</th>
-                    <td>{{ attempt.attempt_time }}</td>
-                    <td>{{ attempt.status }}</td>
-                    <td>{{ attempt.server_response }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="row g-4">
+        <!-- Левая колонка: Основная информация -->
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Статус и параметры</h5>
+
+                    <div class="mb-4">
+                        <label class="text-muted small d-block mb-1">Текущий статус</label>
+                        {% if mailing.status == 'created' %}
+                            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 fs-6 rounded-pill border">Создана</span>
+                        {% elif mailing.status == 'launched' %}
+                            <span class="badge bg-success-subtle text-success px-3 py-2 fs-6 rounded-pill border">Запущена</span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 fs-6 rounded-pill border">Завершена</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small d-block">Время начала</label>
+                        <span class="fw-semibold text-dark">{{ mailing.start_time }}</span>
+                    </div>
+
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small d-block">Время окончания</label>
+                        <span class="fw-semibold text-dark">{{ mailing.end_time }}</span>
+                    </div>
+
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-muted small d-block">Связанное сообщение</label>
+                        <a href="{% url 'core:message_details' pk=mailing.message.id %}" class="fw-semibold text-decoration-none d-inline-flex align-items-center gap-1">
+                            {{ mailing.message.subject }}
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.646 5.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708z"/></svg>
+                        </a>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded mt-4">
+                        <div>
+                            <div class="fs-4 fw-bold text-primary">{{ mailing.recipients.all.count }}</div>
+                            <div class="text-muted small">Получателей</div>
+                        </div>
+                        <div class="border-start ps-3">
+                            <div class="fs-4 fw-bold text-dark">{{ mailing.attempts.all.count }}</div>
+                            <div class="text-muted small">Всего попыток</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка: Таблица логов -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white p-4 border-0 pb-0">
+                    <h5 class="card-title fw-bold mb-4">История и попытки рассылки</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 text-nowrap">
+                            <thead class="table-light text-muted small uppercase">
+                                <tr>
+                                    <th scope="col" class="ps-4" style="width: 70px;">ID</th>
+                                    <th scope="col">Дата и время</th>
+                                    <th scope="col">Статус</th>
+                                    <th scope="col">Почтовый адрес</th>
+                                    <th scope="col" class="pe-4">Ответ сервера</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attempt in mailing.attempts.all %}
+                                <tr>
+                                    <td class="ps-4 text-muted fw-medium">#{{ attempt.id }}</td>
+                                    <td>
+                                        <span class="small text-secondary">{{ attempt.attempt_time }}</span>
+                                    </td>
+                                    <td>
+                                        {% if attempt.status == 'successful' or attempt.status == 'success' %}
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-1 px-2 py-1">OK</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-1 px-2 py-1">Ошибка</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="fw-medium text-dark">{{ attempt.recipient.email }}</td>
+                                    <td class="pe-4">
+                                        {% if attempt.status == 'successful' or attempt.status == 'success' %}
+                                            <span class="text-muted small">Отправлено успешно</span>
+                                        {% else %}
+                                            <code class="text-danger small bg-danger-subtle px-2 py-1 rounded border-0" style="font-size: 0.8rem;">{{ attempt.server_response }}</code>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">
+                                        <div class="mb-2 fs-3">📭</div>
+                                        Попыток отправки ещё не было
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
