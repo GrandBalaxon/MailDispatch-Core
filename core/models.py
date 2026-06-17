@@ -48,7 +48,9 @@ class Mailing(models.Model):
         Метод проверки текущего времени, сравнения его с временем начала и окончания рассылки и обновления статуса рассылки.
         """
         current_time = now()
-        if self.start_time < current_time < self.end_time:
+        if current_time < self.start_time:
+            self.status = "created"
+        elif self.start_time < current_time < self.end_time:
             self.status = "launched"
         elif self.end_time <= current_time:
             self.status = "finished"
@@ -72,6 +74,7 @@ class MailingAttempt(models.Model):
     )
     server_response = models.TextField(verbose_name="Ответ почтового сервера")
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name="Рассылка", related_name="attempts")
+    recipient = models.ForeignKey(MailingRecipient, on_delete=models.CASCADE, verbose_name="Получатель")
 
     def __str__(self):
         return f"{self.attempt_time} - {self.status}"

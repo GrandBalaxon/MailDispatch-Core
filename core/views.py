@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -107,6 +108,18 @@ class MailingDeleteView(DeleteView):
     success_url = reverse_lazy("core:mailing_list")
 
 
+def mailing_run_view(request, pk):
+    mailing = get_object_or_404(Mailing, pk=pk)
+
+    try:
+        run_mailing(mailing)
+        messages.success(request, "Рассылка успешно выполнена!")
+    except ValueError as e:
+        messages.error(request, str(e))
+
+    return redirect('core:mailing_details', pk=pk)
+
+
 # model Messages views
 class MessagesView(ListView):
     model = Message
@@ -143,10 +156,3 @@ class MessageDeleteView(DeleteView):
     model = Message
     template_name = "core/messages/delete.html"
     success_url = reverse_lazy("core:message_list")
-
-
-def mailing_run_view(request, pk):
-    mailing = get_object_or_404(Mailing, pk=pk)
-
-    run_mailing(mailing)
-    return redirect('core:mailing_details', pk=pk)
