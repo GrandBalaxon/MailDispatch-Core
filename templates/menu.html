@@ -51,7 +51,7 @@
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                     <li><a class="dropdown-item" href="#">Профиль</a></li>
                     <li>
-                        <form method="post" action="#" class="d-inline">
+                        <form method="post" action="{% url 'users:logout' %}" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="dropdown-item text-danger">Выход</button>
                         </form>
@@ -61,7 +61,7 @@
             </div>
         {% else %}
             <div class="d-flex align-items-center gap-2">
-                <a class="p-2 btn btn-outline-primary" href="#">Войти</a>
+                <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
                 <a class="p-2 btn btn-primary" href="{% url 'users:register' %}">Регистрация</a>
             </div>
         {% endif %}
