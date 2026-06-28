@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from core.mixins import StyleFormMixin
 from users.models import CustomUser
 
 
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserCreationForm(StyleFormMixin, UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'avatar']
@@ -15,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['password2'].help_text = 'Введите повторно пароль для верификации.'
 
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(StyleFormMixin, UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'avatar']
