@@ -14,9 +14,35 @@
             <form method="post">
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                <!-- Общие ошибки (неверный логин/пароль) -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
 
-                <button type="submit" class="btn btn-primary">Войти</button>
+                <!-- Почта -->
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">Почта</label>
+                    <input type="email" class="form-control" id="emailInput" name="username" required>
+                    {% if form.username.errors %}
+                        <div class="text-danger">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Пароль -->
+                <div class="mb-3">
+                    <label for="passwordInput" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                    {% if form.password.errors %}
+                        <div class="text-danger">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="pt-3">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <a class="btn btn-outline-primary" href="#">Забыли пароль?</a>
+                </div>
 
             </form>
 
