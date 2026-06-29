@@ -1,10 +1,12 @@
 from secrets import token_hex
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 
 from config.settings import EMAIL_HOST_USER
+from core.models import Mailing, MailingRecipient, MailingAttempt
 from users.forms import CustomUserCreationForm
 from users.models import CustomUser
 
@@ -37,3 +39,34 @@ def email_verification(request, token):
     user.is_active = True
     user.save()
     return render(request, 'users/email_confirmed.html')
+
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Статистика
+        context['total_mailings'] = Mailing.objects.filter(author=user).count()
+        context['active_mailings'] = Mailing.objects.filter(
+            author=user, status='launched'
+        ).count()
+        context['total_recipients'] = MailingRecipient.objects.filter(
+            added_by=user
+        ).count()
+        context['total_attempts'] = MailingAttempt.objects.filter(
+            mailing__author=user
+        ).count()
+
+        # Последние рассылки и получатели
+        context['recent_mailings'] = Mailing.objects.filter(
+            author=user
+        ).order_by('-start_time')[:5]
+
+        context['recent_recipients'] = MailingRecipient.objects.filter(
+            added_by=user
+        ).order_by('-id')[:5]
+
+        return context
