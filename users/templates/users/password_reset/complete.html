@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container flex-grow-1">
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Пароль изменён</h1>
+        <p class="lead">
+            Ваш пароль был успешно обновлён. Теперь вы можете войти в аккаунт с новым паролем.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 text-center">
+            <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
