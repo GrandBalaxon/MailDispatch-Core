@@ -23,7 +23,12 @@
             <h2 class="fw-bold mb-2">{{ user.get_full_name|default:user.username }}</h2>
             <p class="text-muted mb-1"><strong>Email:</strong> {{ user.email }}</p>
             <p class="text-muted mb-0"><strong>На сайте с:</strong> {{ user.date_joined|date:"d.m.Y" }}</p>
-            <p class="text-muted mb-0"><strong>Роль:</strong> {{ user.role }}</p>
+            <p class="text-muted mb-0">
+                <strong>Роль:</strong>
+                <span class="badge {% if user.role == 'manager' %}bg-primary{% else %}bg-secondary{% endif %}">
+                    {{ user.get_role_display }}
+                </span>
+            </p>
         </div>
 
         <!-- Кнопка редактирования -->

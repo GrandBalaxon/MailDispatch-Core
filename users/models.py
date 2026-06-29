@@ -1,3 +1,5 @@
+import ast
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -12,7 +14,7 @@ class CustomUser(AbstractUser):
         ('manager', 'Менеджер')
     ]
     role = models.CharField(
-        default=ROLE_CHOICES[0],
+        default='user',
         max_length=100,
         choices=ROLE_CHOICES,
         verbose_name="Роль"
