@@ -7,6 +7,17 @@ class CustomUser(AbstractUser):
     token = models.CharField(max_length=100, verbose_name="Токен верификации")
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватар")
 
+    ROLE_CHOICES = [
+        ('user', 'Пользователь'),
+        ('manager', 'Менеджер')
+    ]
+    role = models.CharField(
+        default=ROLE_CHOICES[0],
+        max_length=100,
+        choices=ROLE_CHOICES,
+        verbose_name="Роль"
+    )
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username',]
 
