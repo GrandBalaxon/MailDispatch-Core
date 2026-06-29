@@ -1,11 +1,22 @@
 from django.db import models
 from django.utils.timezone import now
 
+from users.models import CustomUser
+
 
 class MailingRecipient(models.Model):
     full_name = models.CharField(max_length=100, verbose_name="Ф.И.О.")
     email = models.EmailField(unique=True)
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="Комментарий")
+
+    added_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="added_recipients",
+        verbose_name="Добавлен пользователем"
+    )
 
     def __str__(self):
         return self.full_name
@@ -18,6 +29,15 @@ class MailingRecipient(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=100, verbose_name="Тема письма")
     body = models.TextField(verbose_name="Тело письма")
+
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="messages",
+        verbose_name="Автор"
+    )
 
     def __str__(self):
         return self.subject
@@ -37,8 +57,17 @@ class Mailing(models.Model):
     start_time = models.DateTimeField(verbose_name="Дата и время начала отправки")
     end_time = models.DateTimeField(verbose_name="Дата и время окончания отправки")
     status = models.CharField(default=STATUS_CHOICES[0], choices=STATUS_CHOICES, verbose_name="Статус")
-    message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
+    message = models.ForeignKey(Message, on_delete=models.PROTECT)
     recipients = models.ManyToManyField(MailingRecipient, related_name="mailings")
+
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="mailings",
+        verbose_name="Автор"
+    )
 
     def __str__(self):
         return f"{self.message} - {self.status} - Получателей: {len(self.recipients.all())}"

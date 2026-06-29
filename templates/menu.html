@@ -38,7 +38,7 @@
                     <span class="font-weight-normal text-dark me-1">{{ user.username }}</span>
 
                     {% if user.avatar %}
-                        <img src="#" alt="Аватар" class="rounded-circle border" width="40" height="40" style="object-fit: cover;">
+                        <img src="{{ user.avatar.url }}" alt="Аватар" class="rounded-circle border" width="40" height="40" style="object-fit: cover;">
                     {% else %}
                         <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle font-weight-bold"
                              style="width: 40px; height: 40px; font-size: 1.1rem;">
