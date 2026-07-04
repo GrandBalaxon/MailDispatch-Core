@@ -101,6 +101,11 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     template_name = "core/mailings/create.html"
     success_url = reverse_lazy("core:mailing_list")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -112,6 +117,11 @@ class MailingUpdateView(OwnerOnlyMixin, UpdateView):
     form_class = MailingForm
     template_name = "core/mailings/update.html"
     success_url = reverse_lazy("core:mailing_list")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class MailingDeleteView(OwnerOnlyMixin, DeleteView):
