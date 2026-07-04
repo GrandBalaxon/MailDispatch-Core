@@ -55,7 +55,7 @@
                     </td>
                     {% if user.role == 'manager' %}
                         <td>
-                            <a href="#"
+                            <a href="{% url 'users:profile' pk=mailing.author.pk %}"
                                class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
 
                                 {% if mailing.author.avatar %}

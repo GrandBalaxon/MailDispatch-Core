@@ -47,7 +47,7 @@
                     </td>
                     {% if user.role == 'manager' %}
                         <td>
-                            <a href="#"
+                            <a href="{% url 'users:profile' pk=recipient.added_by.pk %}"
                                class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
 
                                 {% if recipient.added_by.avatar %}

@@ -39,7 +39,7 @@
                     </td>
                     {% if user.role == 'manager' %}
                         <td class="align-middle">
-                            <a href="#"
+                            <a href="{% url 'users:profile' pk=message.author.pk %}"
                                class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
 
                                 {% if message.author.avatar %}

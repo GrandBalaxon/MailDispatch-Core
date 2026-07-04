@@ -1,9 +1,11 @@
 from secrets import token_hex
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import CreateView, TemplateView
+from django.urls import reverse
+from django.views.generic import CreateView, DetailView, RedirectView
 
 from config.settings import EMAIL_HOST_USER
 from core.models import Mailing, MailingRecipient, MailingAttempt
@@ -41,32 +43,47 @@ def email_verification(request, token):
     return render(request, 'users/email_confirmed.html')
 
 
-class UserProfileView(LoginRequiredMixin, TemplateView):
+class UserProfileView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = CustomUser
     template_name = 'users/profile.html'
+    context_object_name = 'profile_user'
+
+    def test_func(self):
+        """Обычный пользователь может смотреть только свой профиль, менеджер — любой."""
+        profile_user = self.get_object()
+        request_user = self.request.user
+        if request_user.role == 'manager':
+            return True
+        return profile_user == request_user
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            return HttpResponseForbidden("У вас нет прав для просмотра этого профиля.")
+        return super().handle_no_permission()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
+        profile_user = self.object
 
         # Статистика
-        context['total_mailings'] = Mailing.objects.filter(author=user).count()
+        context['total_mailings'] = Mailing.objects.filter(author=profile_user).count()
         context['active_mailings'] = Mailing.objects.filter(
-            author=user, status='launched'
+            author=profile_user, status='launched'
         ).count()
         context['total_recipients'] = MailingRecipient.objects.filter(
-            added_by=user
+            added_by=profile_user
         ).count()
         context['total_attempts'] = MailingAttempt.objects.filter(
-            mailing__author=user
+            mailing__author=profile_user
         ).count()
 
         # Последние рассылки и получатели
         context['recent_mailings'] = Mailing.objects.filter(
-            author=user
+            author=profile_user
         ).order_by('-start_time')[:5]
 
         context['recent_recipients'] = MailingRecipient.objects.filter(
-            added_by=user
+            added_by=profile_user
         ).order_by('-id')[:5]
 
         return context
