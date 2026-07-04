@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container flex-grow-1">
+
+    <div class="mt-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Профиль</th>
+                    <th scope="col">Почта</th>
+                    <th scope="col">Статус активности</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <th scope="row" class="align-middle">{{ user.id }}</th>
+                    <td class="align-middle">
+                            <a href="{% url 'users:profile' pk=user.pk %}"
+                               class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
+
+                                {% if user.avatar %}
+                                    <img src="{{ user.avatar.url }}" alt="Аватар" class="rounded-circle" width="36" height="36" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                         style="width: 36px; height: 36px; font-size: 1rem;">
+                                        {{ user.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
+
+                                <span class="fw-semibold text-dark small">{{ user.username }}</span>
+                            </a>
+                        </td>
+                    <td class="align-middle">{{ user.email }}</td>
+                    <td class="align-middle">
+                        {% if not user.is_active %}
+                            <span class="badge bg-danger text-white px-2 py-1">Заблокирован</span>
+                        {% else %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Активен</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

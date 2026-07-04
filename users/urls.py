@@ -7,6 +7,8 @@ from users.views import *
 app_name = "users"
 
 urlpatterns = [
+    path('', UsersListView.as_view(), name='users'),
+
     path("register/", RegisterView.as_view(), name="register"),
     path("email-confirm/<str:token>/", email_verification, name="email-confirm"),
     path("login/",LoginView.as_view(template_name="users/login.html"), name="login"),

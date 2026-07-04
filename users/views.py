@@ -7,12 +7,26 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from config.settings import EMAIL_HOST_USER
 from core.models import Mailing, MailingRecipient, MailingAttempt
 from users.forms import CustomUserCreationForm, CustomUserUpdateForm
 from users.models import CustomUser
+
+
+class UsersListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = CustomUser
+    template_name = 'users/list.html'
+    context_object_name = 'users'
+
+    def test_func(self):
+        return self.request.user.role == 'manager'
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            return HttpResponseForbidden("У вас нет прав для посещения данного раздела.")
+        return super().handle_no_permission()
 
 
 class RegisterView(CreateView):
