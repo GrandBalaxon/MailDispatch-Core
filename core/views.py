@@ -1,10 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from core.forms import MailingRecipientForm, MailingForm, MessageForm
+from core.mixins import UserQuerysetFilterMixin, OwnerOrManagerMixin, OwnerOnlyMixin
 from core.models import Mailing, MailingRecipient, Message
 from core.services import run_mailing
 
@@ -31,85 +34,100 @@ class HomePageView(TemplateView):
 
 
 # model MailingRecipient views
-class MailingRecipientsView(ListView):
+class MailingRecipientsView(LoginRequiredMixin, UserQuerysetFilterMixin, ListView):
     model = MailingRecipient
+    owner_field = 'added_by'
     template_name = "core/recipients/list.html"
     context_object_name = "recipients"
 
 
-class RecipientDetailsView(TemplateView):
+class RecipientDetailsView(OwnerOrManagerMixin, DetailView):
     model = MailingRecipient
     template_name = "core/recipients/details.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        recipient = MailingRecipient.objects.get(pk=self.kwargs["pk"])
-        context['recipient'] = recipient
-        return context
+    owner_field = 'added_by'
+    context_object_name = 'recipient'
 
 
-class RecipientCreateView(CreateView):
+class RecipientCreateView(LoginRequiredMixin, CreateView):
     model = MailingRecipient
     form_class = MailingRecipientForm
     template_name = "core/recipients/create.html"
     success_url = reverse_lazy("core:recipient_list")
 
+    def form_valid(self, form):
+        form.instance.added_by = self.request.user
+        return super().form_valid(form)
 
-class RecipientUpdateView(UpdateView):
+
+class RecipientUpdateView(OwnerOnlyMixin, UpdateView):
     model = MailingRecipient
+    owner_field = 'added_by'
     form_class = MailingRecipientForm
     template_name = "core/recipients/update.html"
     success_url = reverse_lazy("core:recipient_list")
 
 
-class RecipientDeleteView(DeleteView):
+class RecipientDeleteView(OwnerOnlyMixin, DeleteView):
     model = MailingRecipient
+    owner_field = 'added_by'
     template_name = "core/recipients/delete.html"
     success_url = reverse_lazy("core:recipient_list")
     context_object_name = "recipient"
 
 
 # model Mailing views
-class MailingsView(ListView):
+class MailingsView(LoginRequiredMixin, UserQuerysetFilterMixin, ListView):
     model = Mailing
     template_name = "core/mailings/list.html"
     context_object_name = "mailings"
 
 
-class MailingDetailsView(TemplateView):
+class MailingDetailsView(OwnerOrManagerMixin, DetailView):
     model = Mailing
     template_name = "core/mailings/details.html"
+    owner_field = 'author'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mailing = Mailing.objects.get(pk=self.kwargs["pk"])
+        mailing = self.object
         mailing.update_status()
         context['mailing'] = mailing
         return context
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = "core/mailings/create.html"
     success_url = reverse_lazy("core:mailing_list")
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-class MailingUpdateView(UpdateView):
+
+class MailingUpdateView(OwnerOnlyMixin, UpdateView):
     model = Mailing
+    owner_field = 'author'
     form_class = MailingForm
     template_name = "core/mailings/update.html"
     success_url = reverse_lazy("core:mailing_list")
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(OwnerOnlyMixin, DeleteView):
     model = Mailing
+    owner_field = 'author'
     template_name = "core/mailings/delete.html"
     success_url = reverse_lazy("core:mailing_list")
+    context_object_name = "mailing"
 
 
+@login_required
 def mailing_run_view(request, pk):
     mailing = get_object_or_404(Mailing, pk=pk)
+
+    if request.user != mailing.author:
+        return HttpResponseForbidden("Только владелец может запускать рассылку.")
 
     try:
         run_mailing(mailing)
@@ -121,38 +139,40 @@ def mailing_run_view(request, pk):
 
 
 # model Messages views
-class MessagesView(ListView):
+class MessagesView(LoginRequiredMixin, UserQuerysetFilterMixin, ListView):
     model = Message
     template_name = "core/messages/list.html"
     context_object_name = "messages"
 
 
-class MessageDetailsView(TemplateView):
+class MessageDetailsView(OwnerOrManagerMixin, DetailView):
     model = Message
     template_name = "core/messages/details.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        message = Message.objects.get(pk=self.kwargs["pk"])
-        context['message'] = message
-        return context
+    owner_field = 'author'
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     template_name = "core/messages/create.html"
     success_url = reverse_lazy("core:message_list")
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-class MessageUpdateView(UpdateView):
+
+class MessageUpdateView(OwnerOnlyMixin, UpdateView):
     model = Message
+    owner_field = 'author'
     form_class = MessageForm
     template_name = "core/messages/update.html"
     success_url = reverse_lazy("core:message_list")
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(OwnerOnlyMixin, DeleteView):
     model = Message
+    owner_field = 'author'
     template_name = "core/messages/delete.html"
     success_url = reverse_lazy("core:message_list")
+    context_object_name = "message"
