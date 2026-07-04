@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core import cache
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -16,20 +17,18 @@ class HomePageView(TemplateView):
     template_name = "core/home.html"
 
     def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        # Общее количество всех созданных рассылок
-        total_mailings = Mailing.objects.all().count()
-        context['total_mailings'] = total_mailings
+        cached_data = cache.get('home_page_stats')
+        if cached_data is None:
+            cached_data = {
+                'total_mailings': Mailing.objects.all().count(),
+                'active_mailings': Mailing.objects.filter(status="launched").count(),
+                'unique_receivers': MailingRecipient.objects.all().count(),
+            }
+            cache.set('home_page_stats', cached_data, 60 * 15)
 
-        # Количество активных рассылок
-        active_mailings = Mailing.objects.filter(status="launched").count()
-        context['active_mailings'] = active_mailings
-
-        # Количество уникальных получателей
-        unique_receivers = MailingRecipient.objects.all().count()
-        context['unique_receivers'] = unique_receivers
-
+        context.update(cached_data)
         return context
 
 
