@@ -22,17 +22,30 @@
 
     <!-- Шапка страницы с заголовком и кнопками управления -->
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pb-3 mb-4 border-bottom">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-1 text-muted small">
-                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Рассылки</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">#{{ mailing.id }}</li>
-                </ol>
-            </nav>
-            <h2 class="fw-bold mb-0">Рассылка #{{ mailing.id }} «{{ mailing.message.subject }}»</h2>
-        </div>
+
+        <h2 class="fw-bold mb-0">Рассылка #{{ mailing.id }} «{{ mailing.message.subject }}»</h2>
 
         <div class="d-flex gap-2">
+            {% if user.role == 'manager' %}
+
+                {% if mailing.status == 'disabled' %}
+                    <a href="{% url 'core:mailing_enable' pk=mailing.id %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <use href="/static/images/play-fill.svg"/>
+                        </svg>
+                        Включить
+                    </a>
+                {% else %}
+                    <a href="{% url 'core:mailing_disable' pk=mailing.id %}" class="btn btn-danger d-inline-flex align-items-center gap-2 px-3">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <use href="/static/images/stop-fill.svg"/>
+                        </svg>
+                        Отключить
+                    </a>
+                {% endif %}
+
+            {% else %}
+
             <a href="{% url 'core:mailing_send' pk=mailing.id %}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 shadow-sm">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <use href="/static/images/send-fill.svg"/>
@@ -51,6 +64,8 @@
                 </svg>
                 Удалить
             </a>
+
+            {% endif %}
         </div>
     </div>
 
@@ -68,7 +83,13 @@
                         {% elif mailing.status == 'launched' %}
                             <span class="badge bg-success-subtle text-success px-3 py-2 fs-6 rounded-pill border">Запущена</span>
                         {% else %}
-                            <span class="badge bg-danger-subtle text-danger px-3 py-2 fs-6 rounded-pill border">Завершена</span>
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 fs-6 rounded-pill border">
+                                {% if mailing.status == 'finished' %}
+                                Завершена
+                                {% else %}
+                                Отключена
+                                {% endif %}
+                            </span>
                         {% endif %}
                     </div>
 

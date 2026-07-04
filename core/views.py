@@ -127,6 +127,34 @@ class MailingUpdateView(OwnerOnlyMixin, UpdateView):
         return kwargs
 
 
+class MailingEnableView(OwnerOrManagerMixin, UpdateView):
+    """Включение рассылки."""
+    model = Mailing
+    owner_field = 'author'
+    fields = []
+    template_name = "core/mailings/enable.html"
+
+    def form_valid(self, form):
+        mailing = self.object
+        mailing.status = 'created'
+        mailing.save()
+        return redirect('core:mailing_details', pk=mailing.pk)
+
+
+class MailingDisableView(OwnerOrManagerMixin, UpdateView):
+    """Отключение рассылки."""
+    model = Mailing
+    owner_field = 'author'
+    fields = []
+    template_name = "core/mailings/disable.html"
+
+    def form_valid(self, form):
+        mailing = self.object
+        mailing.status = 'disabled'
+        mailing.save()
+        return redirect('core:mailing_details', pk=mailing.pk)
+
+
 class MailingDeleteView(OwnerOnlyMixin, DeleteView):
     model = Mailing
     owner_field = 'author'

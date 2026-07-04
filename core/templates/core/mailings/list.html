@@ -34,8 +34,10 @@
                             <div class="btn btn-sm btn-secondary">Создана</div>
                         {% elif mailing.status == 'launched' %}
                             <div class="btn btn-sm btn-success">Запущена</div>
-                        {% else %}
+                        {% elif mailing.status == 'finished' %}
                             <div class="btn btn-sm btn-danger">Завершена</div>
+                        {% else %}
+                            <div class="btn btn-sm btn-dark">Отключена</div>
                         {% endif %}
                     </td>
                     <td>{{ mailing.start_time }}</td>
