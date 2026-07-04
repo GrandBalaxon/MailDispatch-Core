@@ -77,6 +77,24 @@
                     <h5 class="card-title fw-bold mb-4">Статус и параметры</h5>
 
                     <div class="mb-4">
+                        <label class="text-muted small d-block mb-2">Автор</label>
+                        <a href="#"
+                           class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
+
+                            {% if mailing.author.avatar %}
+                                <img src="{{ mailing.author.avatar.url }}" alt="Аватар" class="rounded-circle" width="36" height="36" style="object-fit: cover;">
+                            {% else %}
+                                <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                     style="width: 36px; height: 36px; font-size: 1rem;">
+                                    {{ mailing.author.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+
+                            <span class="fw-semibold text-dark small">{{ mailing.author.username }}</span>
+                        </a>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="text-muted small d-block mb-1">Текущий статус</label>
                         {% if mailing.status == 'created' %}
                             <span class="badge bg-secondary-subtle text-secondary px-3 py-2 fs-6 rounded-pill border">Создана</span>

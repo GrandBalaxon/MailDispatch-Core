@@ -54,7 +54,22 @@
                         </a>
                     </td>
                     {% if user.role == 'manager' %}
-                        <td>{{ mailing.author }}</td>
+                        <td>
+                            <a href="#"
+                               class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
+
+                                {% if mailing.author.avatar %}
+                                    <img src="{{ mailing.author.avatar.url }}" alt="Аватар" class="rounded-circle" width="36" height="36" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                         style="width: 36px; height: 36px; font-size: 1rem;">
+                                        {{ mailing.author.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
+
+                                <span class="fw-semibold text-dark small">{{ mailing.author.username }}</span>
+                            </a>
+                        </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
