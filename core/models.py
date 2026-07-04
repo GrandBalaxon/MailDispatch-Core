@@ -51,7 +51,8 @@ class Mailing(models.Model):
     STATUS_CHOICES = [
         ("created", "Создана"),
         ("launched", "Запущена"),
-        ("finished", "Завершена")
+        ("finished", "Завершена"),
+        ("disabled", "Отключена")
     ]
 
     start_time = models.DateTimeField(verbose_name="Дата и время начала отправки")

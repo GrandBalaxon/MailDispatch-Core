@@ -90,7 +90,10 @@ class MailingDetailsView(OwnerOrManagerMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         mailing = self.object
-        mailing.update_status()
+
+        if mailing.status != "disabled":
+            mailing.update_status()
+
         context['mailing'] = mailing
         return context
 
