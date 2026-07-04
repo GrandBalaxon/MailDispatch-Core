@@ -16,7 +16,7 @@ class CustomUserCreationForm(StyleFormMixin, UserCreationForm):
         self.fields['password2'].help_text = 'Введите повторно пароль для верификации.'
 
 
-class CustomUserChangeForm(StyleFormMixin, UserChangeForm):
+class CustomUserUpdateForm(StyleFormMixin, UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'avatar']

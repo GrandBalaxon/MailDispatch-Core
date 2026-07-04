@@ -4,12 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views.generic import CreateView, DetailView, RedirectView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView, RedirectView, UpdateView
 
 from config.settings import EMAIL_HOST_USER
 from core.models import Mailing, MailingRecipient, MailingAttempt
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, CustomUserUpdateForm
 from users.models import CustomUser
 
 
@@ -87,3 +87,21 @@ class UserProfileView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         ).order_by('-id')[:5]
 
         return context
+
+
+class UserProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = CustomUser
+    form_class = CustomUserUpdateForm
+    template_name = 'users/profile_edit.html'
+
+    def test_func(self):
+        profile_user = self.get_object()
+        return profile_user == self.request.user
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            return HttpResponseForbidden("Только владелец может редактировать свой профиль.")
+        return super().handle_no_permission()
+
+    def get_success_url(self):
+        return reverse('users:profile', kwargs={'pk': self.object.pk})

@@ -33,7 +33,7 @@
 
         <!-- Кнопка редактирования -->
         <div class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0">
-            <a href="#" class="btn btn-outline-primary px-4">Редактировать профиль</a>
+            <a href="{% url 'users:profile_edit' pk=user.pk %}" class="btn btn-outline-primary px-4">Редактировать профиль</a>
         </div>
 
     </div>
