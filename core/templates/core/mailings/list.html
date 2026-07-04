@@ -17,6 +17,9 @@
                     <th scope="col">Количество получателей</th>
                     <th scope="col">Количество попыток отправки</th>
                     <th scope="col">Управление</th>
+                    {% if user.role == 'manager' %}
+                        <th scope="col">Автор</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +49,9 @@
                             Подробнее
                         </a>
                     </td>
+                    {% if user.role == 'manager' %}
+                        <td>{{ mailing.author }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

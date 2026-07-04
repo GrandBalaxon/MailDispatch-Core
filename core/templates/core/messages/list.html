@@ -13,6 +13,9 @@
                     <th scope="col">Тема письма</th>
                     <th scope="col">Тело письма</th>
                     <th scope="col">Управление</th>
+                    {% if user.role == 'manager' %}
+                        <th scope="col">Автор</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +35,9 @@
                             </a>
                         </div>
                     </td>
+                    {% if user.role == 'manager' %}
+                        <td class="align-middle">{{ message.author }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

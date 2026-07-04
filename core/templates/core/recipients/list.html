@@ -14,6 +14,9 @@
                     <th scope="col">email</th>
                     <th scope="col">Рассылки</th>
                     <th scope="col">Управление</th>
+                    {% if user.role == 'manager' %}
+                        <th scope="col">Добавил на сайт</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +43,9 @@
                             Подробнее
                         </a>
                     </td>
+                    {% if user.role == 'manager' %}
+                        <td>{{ recipient.added_by }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
