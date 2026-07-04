@@ -1,90 +1,102 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container flex-grow-1">
+<div class="container my-4">
 
     {% if mailings %}
 
-    <a class="btn btn-primary" href="{% url 'core:mailing_create' %}">Добавить рассылку</a>
+    <!-- Заголовок страницы и кнопка -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0 text-dark">Рассылки</h1>
+        <a class="btn btn-primary btn-sm shadow-sm" href="{% url 'core:mailing_create' %}">
+            + Добавить рассылку
+        </a>
+    </div>
 
-    <div class="mt-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Тема рассылки</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Дата и время начала отправки</th>
-                    <th scope="col">Дата и время окончания отправки</th>
-                    <th scope="col">Количество получателей</th>
-                    <th scope="col">Количество попыток отправки</th>
-                    <th scope="col">Управление</th>
-                    {% if user.role == 'manager' %}
-                        <th scope="col">Автор</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for mailing in mailings %}
-                <tr class="align-middle">
-                    <th scope="row">{{ mailing.id }}</th>
-                    <td>{{ mailing.message }}</td>
-                    <td>
-                        {% if mailing.status == 'created' %}
-                            <div class="btn btn-sm btn-secondary">Создана</div>
-                        {% elif mailing.status == 'launched' %}
-                            <div class="btn btn-sm btn-success">Запущена</div>
-                        {% elif mailing.status == 'finished' %}
-                            <div class="btn btn-sm btn-danger">Завершена</div>
-                        {% else %}
-                            <div class="btn btn-sm btn-dark">Отключена</div>
+    <!-- Карточка с таблицей -->
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small">
+                    <tr>
+                        <th scope="col" class="ps-3 py-2">ID</th>
+                        <th scope="col" class="py-2">Тема рассылки</th>
+                        <th scope="col" class="py-2">Статус</th>
+                        <th scope="col" class="py-2">Начало отправки</th>
+                        <th scope="col" class="py-2">Окончания отправки</th>
+                        <th scope="col" class="py-2 text-center">Получатели</th>
+                        <th scope="col" class="py-2 text-center">Попытки</th>
+                        {% if user.role == 'manager' %}
+                            <th scope="col" class="py-2">Автор</th>
                         {% endif %}
-                    </td>
-                    <td>{{ mailing.start_time }}</td>
-                    <td>{{ mailing.end_time }}</td>
-                    <td>{{ mailing.recipients.all.count }}</td>
-                    <td>{{ mailing.attempts.all.count }}</td>
-                    <td>
-                        <a href="{% url 'core:mailing_details' pk=mailing.id %}"
-                           class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-3">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
-                                <use href="/static/images/info-circle.svg"/>
-                            </svg>
-                            Подробнее
-                        </a>
-                    </td>
-                    {% if user.role == 'manager' %}
+                        <th scope="col" class="pe-3 py-2 text-end">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for mailing in mailings %}
+
+                    <tr>
+                        <td class="ps-3 text-muted">#{{ mailing.id }}</td>
+                        <td class="fw-medium text-dark">{{ mailing.message }}</td>
                         <td>
-                            <a href="{% url 'users:profile' pk=mailing.author.pk %}"
-                               class="btn btn-light d-inline-flex align-items-center gap-2 p-1 pe-3 border rounded-pill shadow-sm text-decoration-none hover-shadow transition">
+                            {% if mailing.status == 'created' %}
+                                <span class="badge rounded-2 bg-secondary-subtle text-secondary">Создана</span>
+                            {% elif mailing.status == 'launched' %}
+                                <span class="badge rounded-2 bg-success-subtle text-success">Запущена</span>
+                            {% elif mailing.status == 'finished' %}
+                                <span class="badge rounded-2 bg-danger-subtle text-danger">Завершена</span>
+                            {% else %}
+                                <span class="badge rounded-2 bg-dark-subtle text-dark">Отключена</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-secondary small">{{ mailing.start_time }}</td>
+                        <td class="text-secondary small">{{ mailing.end_time }}</td>
+                        <td class="text-center fw-medium text-dark">{{ mailing.recipients.all.count }}</td>
+                        <td class="text-center fw-medium text-dark">{{ mailing.attempts.all.count }}</td>
 
-                                {% if mailing.author.avatar %}
-                                    <img src="{{ mailing.author.avatar.url }}" alt="Аватар" class="rounded-circle" width="36" height="36" style="object-fit: cover;">
-                                {% else %}
-                                    <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
-                                         style="width: 36px; height: 36px; font-size: 1rem;">
-                                        {{ mailing.author.username|slice:":1"|upper }}
-                                    </div>
-                                {% endif %}
+                        {% if user.role == 'manager' %}
+                            <td>
+                                <a href="{% url 'users:profile' pk=mailing.author.pk %}"
+                                   class="d-inline-flex align-items-center gap-2 text-decoration-none text-dark bg-light border p-1 pe-2 rounded-pill small">
+                                    {% if mailing.author.avatar %}
+                                        <img src="{{ mailing.author.avatar.url }}" alt="Аватар" class="rounded-circle" width="24" height="24" style="object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                             style="width: 24px; height: 24px; font-size: 0.75rem;">
+                                            {{ mailing.author.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <span>{{ mailing.author.username }}</span>
+                                </a>
+                            </td>
+                        {% endif %}
 
-                                <span class="fw-semibold text-dark small">{{ mailing.author.username }}</span>
+                        <td class="pe-3 text-end">
+                            <a href="{% url 'core:mailing_details' pk=mailing.id %}"
+                               class="btn btn-sm btn-outline-secondary py-1">
+                                Подробнее
                             </a>
                         </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {% else %}
 
-    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-4">Вы еще не добавили ни одну рассылку</h1>
-    </div>
-
-    <div class="d-flex justify-content-center align-items-center">
-        <a class="btn btn-lg btn-primary align-items-center" href="{% url 'core:mailing_create' %}">Добавить</a>
+    <div class="card text-center border-0 shadow-sm rounded-3 py-5 my-5 mx-auto" style="max-width: 450px;">
+        <div class="card-body">
+            <h3 class="h5 text-dark mb-2">Рассылки не найдены</h3>
+            <p class="text-muted small mb-4">Вы еще не запланировали ни одной автоматической рассылки писем.</p>
+            <a class="btn btn-primary btn-sm px-4" href="{% url 'core:mailing_create' %}">
+                Создать первую
+            </a>
+        </div>
     </div>
 
     {% endif %}
