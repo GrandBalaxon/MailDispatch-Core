@@ -13,6 +13,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(next_page='/'), name="logout"),
     path("profile/<int:pk>/", UserProfileView.as_view(), name="profile"),
     path("profile/<int:pk>/edit/", UserProfileUpdateView.as_view(), name="profile_edit"),
+    path("profile/<int:pk>/toggle-active/", toggle_user_active, name="profile_toggle_active"),
 
     path('password-reset/',
          PasswordResetView.as_view(

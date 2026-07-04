@@ -1,11 +1,13 @@
 from secrets import token_hex
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, RedirectView, UpdateView
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
+from django.views.decorators.http import require_POST
+from django.views.generic import CreateView, DetailView, UpdateView
 
 from config.settings import EMAIL_HOST_USER
 from core.models import Mailing, MailingRecipient, MailingAttempt
@@ -105,3 +107,19 @@ class UserProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
 
     def get_success_url(self):
         return reverse('users:profile', kwargs={'pk': self.object.pk})
+
+
+@require_POST
+@login_required
+def toggle_user_active(request, pk):
+    if request.user.role != 'manager':
+        return HttpResponseForbidden("Только менеджер может блокировать пользователей.")
+
+    user = get_object_or_404(CustomUser, pk=pk)
+
+    if user == request.user:
+        return HttpResponseForbidden("Нельзя заблокировать самого себя.")
+
+    user.is_active = not user.is_active
+    user.save()
+    return redirect('users:profile', pk=user.pk)

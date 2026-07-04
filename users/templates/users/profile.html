@@ -19,7 +19,19 @@
 
         <!-- Данные пользователя -->
         <div class="col-12 col-md-6 text-center text-md-start">
-            <span class="badge bg-light text-primary mb-2 fw-normal">Личный кабинет</span>
+            <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start mb-2">
+                {% if profile_user == user %}
+                    <span class="badge bg-light text-primary fw-normal border">Личный кабинет</span>
+                {% endif %}
+
+                <!-- Статус блокировки -->
+                {% if not profile_user.is_active %}
+                    <span class="badge bg-danger text-white px-2 py-1">Заблокирован</span>
+                {% else %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Активен</span>
+                {% endif %}
+            </div>
+
             <h2 class="fw-bold mb-2">{{ profile_user.username }}</h2>
             <p class="text-muted mb-1"><strong>Email:</strong> {{ profile_user.email }}</p>
             <p class="text-muted mb-0"><strong>На сайте с:</strong> {{ profile_user.date_joined|date:"d.m.Y" }}</p>
@@ -31,10 +43,24 @@
             </p>
         </div>
 
-        <!-- Кнопка редактирования -->
-        <div class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0">
-            <a href="{% url 'users:profile_edit' pk=user.pk %}" class="btn btn-outline-primary px-4">Редактировать профиль</a>
-        </div>
+        <!-- Кнопка редактирования / смены статуса блокировки -->
+        {% if profile_user == user %}
+            <div class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0">
+                <a href="{% url 'users:profile_edit' pk=user.pk %}" class="btn btn-outline-primary px-4">Редактировать профиль</a>
+            </div>
+        {% elif user.role == 'manager' and profile_user != user %}
+            <div class="col-12 col-md-3 text-center text-md-end mt-3 mt-md-0">
+                <form method="post" action="{% url 'users:profile_toggle_active' pk=profile_user.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn {% if profile_user.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %} d-inline-flex align-items-center gap-2 px-3 shadow-sm">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <use href="/static/images/ban.svg"/>
+                        </svg>
+                        {% if profile_user.is_active %}Заблокировать{% else %}Разблокировать{% endif %}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
 
     </div>
 
