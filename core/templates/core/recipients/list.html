@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+
+    {% if recipients %}
+
+    <!-- Заголовок страницы и кнопка -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0 text-dark">Получатели</h1>
+        <a class="btn btn-primary btn-sm shadow-sm" href="{% url 'core:recipient_create' %}">
+            + Добавить получателя
+        </a>
+    </div>
+
+    <!-- Карточка с таблицей -->
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small">
+                    <tr>
+                        <th scope="col" class="ps-3 py-2">ID</th>
+                        <th scope="col" class="py-2">Ф.И.О.</th>
+                        <th scope="col" class="py-2">Email</th>
+                        <th scope="col" class="py-2">Рассылки</th>
+                        {% if user.role == 'manager' %}
+                            <th scope="col" class="py-2">Автор</th>
+                        {% endif %}
+                        <th scope="col" class="pe-3 py-2 text-end">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for recipient in recipients %}
+
+                    <tr>
+                        <td class="ps-3 text-muted">#{{ recipient.id }}</td>
+                        <td class="fw-medium text-dark">{{ recipient.full_name }}</td>
+                        <td class="text-secondary">{{ recipient.email }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for mailing in recipient.mailings.all %}
+                                    <span class="badge rounded-2
+                                        {% if mailing.status == 'created' %}bg-secondary-subtle text-secondary
+                                        {% elif mailing.status == 'launched' %}bg-success-subtle text-success
+                                        {% else %}bg-danger-subtle text-danger{% endif %}">
+                                        {{ mailing.message }}
+                                        <span class="badge bg-white text-dark border ms-1">
+                                            {{ mailing.recipients.all.count }}
+                                        </span>
+                                    </span>
+                                {% empty %}
+                                    <span class="text-muted small">—</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        {% if user.role == 'manager' %}
+                        <td>
+                            <a href="{% url 'users:profile' pk=recipient.added_by.pk %}"
+                               class="d-inline-flex align-items-center gap-2 text-decoration-none text-dark bg-light border p-1 pe-2 rounded-pill small">
+                                {% if recipient.added_by.avatar %}
+                                    <img src="{{ recipient.added_by.avatar.url }}" alt="Аватар" class="rounded-circle" width="24" height="24" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                         style="width: 24px; height: 24px; font-size: 0.75rem;">
+                                        {{ recipient.added_by.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
+                                <span>{{ recipient.added_by.username }}</span>
+                            </a>
+                        </td>
+                        {% endif %}
+                        <td class="pe-3 text-end">
+                            <a href="{% url 'core:recipient_details' pk=recipient.id %}"
+                               class="btn btn-sm btn-outline-secondary py-1">
+                                Подробнее
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="card text-center border-0 shadow-sm rounded-3 py-5 my-5 mx-auto" style="max-width: 450px;">
+        <div class="card-body">
+            <h3 class="h5 text-dark mb-2">Получатели не найдены</h3>
+            <p class="text-muted small mb-4">Вы еще не добавили ни одного контакта в базу данных.</p>
+            <a class="btn btn-primary btn-sm px-4" href="{% url 'core:recipient_create' %}">
+                Добавить первого
+            </a>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

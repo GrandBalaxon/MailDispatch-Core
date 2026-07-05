@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container flex-grow-1">
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Отключение рассылки</h1>
+        <p class="lead">Вы действительно хотите отключить рассылку <strong>#{{ mailing.id }}</strong>?</p>
+    </div>
+
+    <div class="row text-center gy-4">
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'core:mailing_details' pk=mailing.id %}" class="btn btn-lg btn-outline-secondary">Отмена</a>
+                <button type="submit" class="btn btn-lg btn-danger">Отключить</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

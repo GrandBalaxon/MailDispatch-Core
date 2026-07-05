@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+
+    <!-- Приветственный блок -->
+    <div class="text-center mb-5">
+        <h1 class="display-6 fw-bold text-dark mb-2">Добро пожаловать в MailDispatch</h1>
+        <p class="text-muted">Система автоматизации и мониторинга корпоративных рассылок</p>
+    </div>
+
+    <!-- Блок со статистикой -->
+    <div class="row g-4 justify-content-center mb-5">
+
+        <!-- Карточка 1: Всего рассылок -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 rounded-3 text-center p-4 h-100">
+                <div class="text-muted small fw-medium mb-1 text-uppercase tracking-wider">Всего рассылок</div>
+                <div class="display-5 fw-bold text-dark my-2">{{ total_mailings }}</div>
+                <div class="text-muted small">создано в системе</div>
+            </div>
+        </div>
+
+        <!-- Карточка 2: Активные рассылки -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 rounded-3 text-center p-4 h-100">
+                <div class="text-muted small fw-medium mb-1 text-uppercase tracking-wider">Активные рассылки</div>
+                <div class="display-5 fw-bold text-success my-2">{{ active_mailings }}</div>
+                <div class="text-muted small">выполняются прямо сейчас</div>
+            </div>
+        </div>
+
+        <!-- Карточка 3: Уникальные получатели -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 rounded-3 text-center p-4 h-100">
+                <div class="text-muted small fw-medium mb-1 text-uppercase tracking-wider">Получатели</div>
+                <div class="display-5 fw-bold text-primary my-2">{{ unique_receivers }}</div>
+                <div class="text-muted small">уникальных email в базе</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Пошаговое руководство для быстрого старта -->
+    <div class="mx-auto" style="max-width: 900px;">
+        <div class="card shadow-sm border-0 rounded-3 p-4 bg-light">
+            <h2 class="h5 fw-bold text-dark mb-4 text-center text-md-start">Как запустить вашу первую рассылку:</h2>
+
+            <div class="row g-4 text-center text-md-start px-md-2">
+
+                <!-- Шаг 1 -->
+                <div class="col-12 col-md-4">
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            <span class="badge bg-primary rounded-circle px-2 py-1.5 fw-bold">1</span>
+                        </div>
+                        <h3 class="h6 fw-bold text-dark mb-1">Создайте контакт</h3>
+                        <p class="text-muted small flex-grow-1 mb-3">Добавьте хотя бы одного получателя, указав его Ф.И.О. и адрес электронной почты.</p>
+                        <a class="btn btn-sm btn-outline-primary mt-auto w-100" href="{% url 'core:recipient_create' %}">Добавить получателя</a>
+                    </div>
+                </div>
+
+                <!-- Шаг 2 -->
+                <div class="col-12 col-md-4 border-start-md border-md-start ps-md-4">
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            <span class="badge bg-primary rounded-circle px-2 py-1.5 fw-bold">2</span>
+                        </div>
+                        <h3 class="h6 fw-bold text-dark mb-1">Напишите текст</h3>
+                        <p class="text-muted small flex-grow-1 mb-3">Создайте шаблон сообщения, придумав тему и тело письма, которое уйдет клиентам.</p>
+                        <a class="btn btn-sm btn-outline-primary mt-auto w-100" href="{% url 'core:message_create' %}">Создать шаблон</a>
+                    </div>
+                </div>
+
+                <!-- Шаг 3 -->
+                <div class="col-12 col-md-4 border-start-md border-md-start ps-md-4">
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            <span class="badge bg-success rounded-circle px-2 py-1.5 fw-bold">3</span>
+                        </div>
+                        <h3 class="h6 fw-bold text-dark mb-1">Запуск рассылки</h3>
+                        <p class="text-muted small flex-grow-1 mb-3">Создайте рассылку, выберите готовый шаблон письма, отметьте получателей и начните отправку.</p>
+                        <a class="btn btn-sm btn-success mt-auto w-100 shadow-sm" href="{% url 'core:mailing_create' %}">Запустить рассылку</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

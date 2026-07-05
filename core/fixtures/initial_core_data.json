@@ -1,0 +1,616 @@
+[
+{
+  "model": "core.mailingrecipient",
+  "pk": 1,
+  "fields": {
+    "full_name": "Иван Иванов Иванович",
+    "email": "ivan1978@mail.ru",
+    "comment": "Это Иван, no shit."
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 2,
+  "fields": {
+    "full_name": "Варенников Александр Петрович",
+    "email": "i_love_them_varennikies@yandex.ru",
+    "comment": "Мужик 40 лет, максимально не прихотлив в подписках и почте, что он получает."
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 3,
+  "fields": {
+    "full_name": "Жульен Фома Грегорьевич",
+    "email": "GergJHUUU@gmail.com",
+    "comment": ""
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 4,
+  "fields": {
+    "full_name": "Бульон Иоанн Харитонович",
+    "email": "i_am_a_god_1988@mail.ru",
+    "comment": "Шиз"
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 5,
+  "fields": {
+    "full_name": "Уэст Канье Омари",
+    "email": "i_am_THE_god@gmail.com",
+    "comment": "Это НЕ он"
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 6,
+  "fields": {
+    "full_name": "Черника Пётр Петрович",
+    "email": "chernika_forte_2000@mail.ru",
+    "comment": ""
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 7,
+  "fields": {
+    "full_name": "Миска Рис Александрович",
+    "email": "rice_lover@yandex.ru",
+    "comment": "he do love it rice"
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 8,
+  "fields": {
+    "full_name": "Цукер Григорий Афанасьевич",
+    "email": "HomeFarewellForever@gmail.com",
+    "comment": ""
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 9,
+  "fields": {
+    "full_name": "Нуар Омаэво Анатольевич",
+    "email": "noor467568@gmail.com",
+    "comment": ""
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 10,
+  "fields": {
+    "full_name": "Пумба Тимон Симбавич",
+    "email": "hakunna_matatah@gmail.com",
+    "comment": ""
+  }
+},
+{
+  "model": "core.mailingrecipient",
+  "pk": 11,
+  "fields": {
+    "full_name": "Реальный ящик",
+    "email": "shinokakaov@mail.ru",
+    "comment": "Для тестирования"
+  }
+},
+{
+  "model": "core.message",
+  "pk": 1,
+  "fields": {
+    "subject": "Тестовое письмо",
+    "body": "Тестовое тело письма"
+  }
+},
+{
+  "model": "core.message",
+  "pk": 2,
+  "fields": {
+    "subject": "Гойда",
+    "body": "Время гойды"
+  }
+},
+{
+  "model": "core.message",
+  "pk": 3,
+  "fields": {
+    "subject": "Концерт Канье",
+    "body": "Вы никогда не попадёте на концерт Канье, увы."
+  }
+},
+{
+  "model": "core.message",
+  "pk": 4,
+  "fields": {
+    "subject": "Test Letter #4",
+    "body": "Test body of a letter numba 4 to test things out real quick. Cause why not, fr?"
+  }
+},
+{
+  "model": "core.mailing",
+  "pk": 1,
+  "fields": {
+    "start_time": "2026-05-01T03:00:00Z",
+    "end_time": "2026-07-01T03:00:00Z",
+    "status": "launched",
+    "message": 1,
+    "recipients": [
+      4,
+      5,
+      7,
+      10,
+      11
+    ]
+  }
+},
+{
+  "model": "core.mailing",
+  "pk": 2,
+  "fields": {
+    "start_time": "2026-04-01T03:00:00Z",
+    "end_time": "2026-09-01T03:00:00Z",
+    "status": "launched",
+    "message": 2,
+    "recipients": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      10
+    ]
+  }
+},
+{
+  "model": "core.mailing",
+  "pk": 3,
+  "fields": {
+    "start_time": "2026-02-01T03:00:00Z",
+    "end_time": "2026-04-01T03:00:00Z",
+    "status": "finished",
+    "message": 3,
+    "recipients": [
+      8,
+      9,
+      5,
+      7,
+      1
+    ]
+  }
+},
+{
+  "model": "core.mailing",
+  "pk": 4,
+  "fields": {
+    "start_time": "2026-07-01T14:45:29Z",
+    "end_time": "2026-09-01T14:45:36Z",
+    "status": "created",
+    "message": 4,
+    "recipients": [
+      11
+    ]
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 5,
+  "fields": {
+    "attempt_time": "2026-06-17T13:22:06.544Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 1
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 6,
+  "fields": {
+    "attempt_time": "2026-06-17T14:12:07.130Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 7,
+  "fields": {
+    "attempt_time": "2026-06-17T14:12:08.581Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 8,
+  "fields": {
+    "attempt_time": "2026-06-17T14:12:09.889Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 9,
+  "fields": {
+    "attempt_time": "2026-06-17T14:12:11.249Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 10,
+  "fields": {
+    "attempt_time": "2026-06-17T14:12:12.664Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 11,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:05.726Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 12,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:07.067Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 13,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:08.454Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 14,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:09.923Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 15,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:11.406Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 16,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:23.881Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 17,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:25.319Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 18,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:26.924Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 19,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:28.432Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 20,
+  "fields": {
+    "attempt_time": "2026-06-17T14:13:30.006Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 21,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:20.441Z",
+    "status": "not successful",
+    "server_response": "[Errno 11001] getaddrinfo failed",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 22,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:20.458Z",
+    "status": "not successful",
+    "server_response": "[Errno 11001] getaddrinfo failed",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 23,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:20.471Z",
+    "status": "not successful",
+    "server_response": "[Errno 11001] getaddrinfo failed",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 24,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:20.486Z",
+    "status": "not successful",
+    "server_response": "[Errno 11001] getaddrinfo failed",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 25,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:20.500Z",
+    "status": "not successful",
+    "server_response": "[Errno 11001] getaddrinfo failed",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 26,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:55.270Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 27,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:56.001Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 28,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:56.774Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 29,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:57.937Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 30,
+  "fields": {
+    "attempt_time": "2026-06-17T14:16:58.678Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 31,
+  "fields": {
+    "attempt_time": "2026-06-17T14:36:10.063Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 32,
+  "fields": {
+    "attempt_time": "2026-06-17T14:36:10.895Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 33,
+  "fields": {
+    "attempt_time": "2026-06-17T14:36:11.679Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 7
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 34,
+  "fields": {
+    "attempt_time": "2026-06-17T14:36:12.454Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 10
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 35,
+  "fields": {
+    "attempt_time": "2026-06-17T14:36:13.422Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 1,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 36,
+  "fields": {
+    "attempt_time": "2026-06-17T14:46:09.235Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 4,
+    "recipient": 11
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 37,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:28.839Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 1
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 38,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:29.817Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 2
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 39,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:30.592Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 3
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 40,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:31.450Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 4
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 41,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:32.214Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 5
+  }
+},
+{
+  "model": "core.mailingattempt",
+  "pk": 42,
+  "fields": {
+    "attempt_time": "2026-06-17T14:52:33.081Z",
+    "status": "successful",
+    "server_response": "OK",
+    "mailing": 2,
+    "recipient": 10
+  }
+}
+]

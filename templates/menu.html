@@ -1,0 +1,81 @@
+<div class="d-flex flex-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm justify-content-between">
+
+    <div class="d-flex align-items-center flex-grow-1">
+
+        <!-- Иконка сайта / HOME-button -->
+        <a class="navbar-brand d-flex align-items-center gap-2 me-4" href="{% url 'core:home' %}">
+            <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                </svg>
+            </div>
+            <span class="fs-5 fw-bold text-dark tracking-tight">
+                Mail<span class="text-primary fw-semibold">Dispatch</span>
+            </span>
+        </a>
+
+        <nav class="nav gap-1 align-items-center d-none d-md-flex">
+            <a class="nav-link px-3 py-2 rounded-2 text-secondary fw-medium hover-bg" href="{% url 'core:recipient_list' %}">Получатели</a>
+            <a class="nav-link px-3 py-2 rounded-2 text-secondary fw-medium hover-bg" href="{% url 'core:message_list' %}">Сообщения</a>
+            <a class="nav-link px-3 py-2 rounded-2 text-secondary fw-medium hover-bg" href="{% url 'core:mailing_list' %}">Рассылки</a>
+
+            {% if user.role == 'manager' %}
+                <a class="nav-link px-3 py-2 rounded-2 text-secondary fw-medium hover-bg" href="{% url 'users:users' %}">Пользователи</a>
+            {% endif %}
+
+            {% if user.is_staff %}
+                <div class="d-flex align-items-center h-100">
+                    <div class="vr mx-2 text-black-50" style="height: 1.5rem;"></div>
+                </div>
+                <a class="nav-link px-3 py-2 rounded-2 text-danger fw-medium hover-bg-danger" href="/admin/">Admin</a>
+            {% endif %}
+        </nav>
+
+    </div>
+
+
+    <div class="d-flex align-items-center gap-2">
+
+        <!-- Меню пользователя / Авторизация -->
+        {% if user.is_authenticated %}
+            <div class="dropdown d-flex align-items-center">
+
+                <button class="btn d-flex align-items-center gap-2 border-0 bg-transparent dropdown-toggle pe-0 shadow-none"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+
+                    <span class="font-weight-normal text-dark me-1">{{ user.username }}</span>
+
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="Аватар" class="rounded-circle border" width="40" height="40" style="object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle font-weight-bold"
+                             style="width: 40px; height: 40px; font-size: 1.1rem;">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item" href="{% url 'users:profile' pk=user.pk %}">Профиль</a></li>
+                    <li>
+                        <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-danger">Выход</button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+        {% else %}
+            <div class="d-flex align-items-center gap-2">
+                <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
+                <a class="p-2 btn btn-primary" href="{% url 'users:register' %}">Регистрация</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>

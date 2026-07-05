@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container flex-grow-1">
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Новый пароль</h1>
+        <p class="lead">Придумайте и введите новый пароль.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Общие ошибки (например, пароли не совпадают) -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Новый пароль -->
+                <div class="mb-3">
+                    <label for="id_new_password1" class="form-label">Новый пароль</label>
+                    <input type="password" name="new_password1" class="form-control" id="id_new_password1" required>
+                    {% if form.new_password1.errors %}
+                        <div class="text-danger">{{ form.new_password1.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Подтверждение пароля -->
+                <div class="mb-3">
+                    <label for="id_new_password2" class="form-label">Подтверждение пароля</label>
+                    <input type="password" name="new_password2" class="form-control" id="id_new_password2" required>
+                    {% if form.new_password2.errors %}
+                        <div class="text-danger">{{ form.new_password2.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Сохранить пароль</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
